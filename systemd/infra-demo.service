@@ -1,0 +1,19 @@
+[Unit]
+Description=Infra Demo HTTP Health Service
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/infra-demo/infra-demo.env
+ExecStart=/usr/bin/python3 /opt/infra-demo/infra-demo.py
+Restart=on-failure
+RestartSec=5
+User=infra-demo
+Group=infra-demo
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/infra-demo
+
+[Install]
+WantedBy=multi-user.target
