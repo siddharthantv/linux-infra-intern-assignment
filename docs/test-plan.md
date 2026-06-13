@@ -163,15 +163,14 @@ sudo ./scripts/validate.sh
 sudo reboot
 # (reconnect)
 sudo ./scripts/validate.sh
+```
 
-Evidence
-Test
-Evidence File
-Base VM setup
-evidence/milestone-1-setup.png
-Service + systemd
-evidence/milestone-2-service.png
-Hardening + idempotency
-evidence/milestone-3-hardening.png
-Validation + reboot
-evidence/milestone-4-reboot-validation.png
+---
+
+| Evidence | Evidence File |
+|---|---|
+| Test | Base VM setup |
+| Base VM setup | evidence/milestone-1-setup.png |
+| Service + systemd | evidence/milestone-2-service.png |
+| Hardening + idempotency | evidence/milestone-3-hardening.png |
+| Validation + reboot | evidence/milestone-4-reboot-validation.png |
