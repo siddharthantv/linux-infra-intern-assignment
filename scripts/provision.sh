@@ -166,7 +166,7 @@ step_harden_ssh() {
 
     # Validate before reloading — a broken sshd config can cut off remote access.
     if sshd -t; then
-        systemctl reload ssh || systemctl reload sshd || true
+        systemctl reload ssh 2>/dev/null || systemctl reload sshd 2>/dev/null || systemctl reload openssh-server 2>/dev/null || true
         echo "SSH configuration hardened and reloaded"
     else
         echo "sshd config test failed, restoring backup" >&2
