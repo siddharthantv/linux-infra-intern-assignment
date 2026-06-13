@@ -132,60 +132,7 @@ git push -u origin main
 
 ---
 
-## Issue 5: ufw Blocks SSH After Enabling
-
-### Symptom
-SSH connection drops immediately after `ufw --force enable`.
-
-### Root Cause
-ufw was enabled before the `allow OpenSSH` rule was applied,
-blocking all incoming connections including SSH.
-
-### Prevention
-`provision.sh` applies firewall rules in the correct order:
-1. `ufw allow OpenSSH` (first)
-2. `ufw allow 8080/tcp` (second)
-3. `ufw --force enable` (last)
-
-If you are ever locked out, use the VirtualBox console window
-(not SSH) to log in directly and run:
-
-```bash
-sudo ufw allow OpenSSH
-sudo ufw reload
-```
-
----
-
-## Issue 6: sshd Config Validation Fails
-
-### Symptom
-```
-sshd config test failed, restoring backup
-```
-
-### Root Cause
-A syntax error was introduced into `/etc/ssh/sshd_config` during
-the hardening step.
-
-### Fix
-`provision.sh` automatically restores the backup if `sshd -t` fails.
-To manually restore:
-
-```bash
-sudo cp /etc/ssh/sshd_config.orig /etc/ssh/sshd_config
-sudo systemctl reload ssh
-```
-
-Always verify the config before reloading:
-
-```bash
-sudo sshd -t && echo "Config OK"
-```
-
----
-
-## Issue 7: infra-demo Service Fails to Start
+## Issue 5: infra-demo Service Fails to Start
 
 ### Symptom
 ```
@@ -221,7 +168,7 @@ sudo -u infra-demo INFRA_DEMO_PORT=8080 \
 
 ---
 
-## Issue 8: validate.sh Permission Denied on ufw
+## Issue 6: validate.sh Permission Denied on ufw
 
 ### Symptom
 ```
