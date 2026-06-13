@@ -52,6 +52,7 @@ fi
 # ---------- 2. HTTP health check ----------
 echo ""
 echo "--- HTTP Health Check ---"
+# Write body to a temp file so we can inspect it separately from the status code.
 HEALTH_RESPONSE=$(curl -s -o /tmp/health_body.$$ -w "%{http_code}" "http://localhost:${DEMO_PORT}/health" || echo "000")
 
 if [ "$HEALTH_RESPONSE" = "200" ]; then
@@ -136,6 +137,7 @@ fi
 echo ""
 echo "--- File Permissions ---"
 
+# Checks both owner and octal permissions in one stat call.
 check_owner_perm() {
     local path="$1" expected_owner="$2" expected_perm="$3"
     if [ ! -e "$path" ]; then

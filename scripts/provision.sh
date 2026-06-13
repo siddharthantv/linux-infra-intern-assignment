@@ -41,6 +41,7 @@ step_detect_os() {
 
 step_update_packages() {
     log "Updating package index and installing required packages"
+    # DEBIAN_FRONTEND=noninteractive suppresses apt prompts during provisioning.
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -y
     apt-get install -y --no-install-recommends \
@@ -58,6 +59,7 @@ step_create_ops_user() {
         adduser --disabled-password --gecos "" "$OPS_USER"
         usermod -aG sudo "$OPS_USER"
         echo "Created $OPS_USER and added to sudo group"
+        # Password must be set manually — disabled-password blocks login until then.
         echo "NOTE: set a password for $OPS_USER manually with: passwd $OPS_USER"
     fi
 }
@@ -67,6 +69,7 @@ step_create_service_user() {
     if id "$APP_USER" &>/dev/null; then
         echo "User $APP_USER already exists, skipping creation"
     else
+        # System user with no home dir and no shell — service doesn't need interactive login.
         useradd --system --no-create-home --shell /usr/sbin/nologin "$APP_USER"
         echo "Created system user $APP_USER"
     fi
@@ -74,8 +77,9 @@ step_create_service_user() {
 
 step_create_directories() {
     log "Creating application directories"
+    # install -d creates directories with explicit owner and permissions in one command.
     install -d -o "$APP_USER" -g "$APP_USER" -m 750 "$APP_DIR"
-    install -d -o root -g "$APP_USER" -m 750 "$CONF_DIR"
+    install -d -o root -g "$APP_USER" -m 750 "$CONF_DIR"   # root-owned; group-readable by service
     install -d -o "$APP_USER" -g "$APP_USER" -m 750 "$LOG_DIR"
 }
 
@@ -88,6 +92,7 @@ step_deploy_app() {
     install -o "$APP_USER" -g "$APP_USER" -m 750 \
         "$REPO_ROOT/scripts/maintenance.sh" "$APP_DIR/maintenance.sh"
 
+    # 640: root owns the env file, service user can read it, others cannot.
     install -o root -g "$APP_USER" -m 640 \
         "$REPO_ROOT/config/infra-demo.env" "$CONF_DIR/infra-demo.env"
 
@@ -109,6 +114,7 @@ step_install_systemd_units() {
         "$REPO_ROOT/systemd/infra-maintenance.timer" \
         /etc/systemd/system/infra-maintenance.timer
 
+    # Required after adding new unit files before systemctl can see them.
     systemctl daemon-reload
 
     systemctl enable --now infra-demo.service
@@ -120,15 +126,12 @@ step_install_systemd_units() {
 step_configure_firewall() {
     log "Configuring firewall (ufw)"
 
-    # Allow SSH so we don't lock ourselves out
+    # SSH must be allowed first to avoid locking ourselves out.
     ufw allow OpenSSH
-
-    # Allow the demo service port
     ufw allow "${DEMO_PORT}/tcp"
 
-    # Enable ufw non-interactively if not already active
     if ufw status | grep -q "Status: inactive"; then
-        ufw --force enable
+        ufw --force enable   # --force skips the interactive y/n prompt
     else
         echo "ufw already active, rules updated"
     fi
@@ -142,26 +145,26 @@ step_harden_ssh() {
     SSHD_CONFIG="/etc/ssh/sshd_config"
     BACKUP="${SSHD_CONFIG}.bak.$(date +%Y%m%d%H%M%S)"
 
+    # Keep a pristine original and a timestamped backup before each run.
     if [ ! -f "${SSHD_CONFIG}.orig" ]; then
         cp "$SSHD_CONFIG" "${SSHD_CONFIG}.orig"
     fi
     cp "$SSHD_CONFIG" "$BACKUP"
 
-    # Disable root login over SSH (idempotent: replace or append)
+    # Replace existing directive if present, otherwise append — keeps the file clean.
     if grep -qE '^\s*PermitRootLogin' "$SSHD_CONFIG"; then
         sed -i 's/^\s*PermitRootLogin.*/PermitRootLogin no/' "$SSHD_CONFIG"
     else
         echo "PermitRootLogin no" >> "$SSHD_CONFIG"
     fi
 
-    # Disable empty passwords
     if grep -qE '^\s*PermitEmptyPasswords' "$SSHD_CONFIG"; then
         sed -i 's/^\s*PermitEmptyPasswords.*/PermitEmptyPasswords no/' "$SSHD_CONFIG"
     else
         echo "PermitEmptyPasswords no" >> "$SSHD_CONFIG"
     fi
 
-    # Validate config before reloading
+    # Validate before reloading — a broken sshd config can cut off remote access.
     if sshd -t; then
         systemctl reload ssh || systemctl reload sshd || true
         echo "SSH configuration hardened and reloaded"
