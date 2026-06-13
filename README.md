@@ -80,6 +80,7 @@ linux-infra-intern-assignment/
     ├── milestone-1-setup.png
     ├── milestone-2-service.png
     ├── milestone-3-hardening.png
+    ├── milestone-3-manual-verification.png
     ├── milestone-4-reboot-validation.png
     └── demo-video.mp4
 
