@@ -293,4 +293,5 @@ Full details: [docs/ai-assistance-notes.md](docs/ai-assistance-notes.md)
 * Vyorius Drones Private Limited — Take-Home Assignment
 
 > [!NOTE]
-> This assignment was done because for further assesment for the ```Linux Infrastructure Intern``` role at **Vyorius Drones Private Limited**
+> This assignment was completed to fulfill the requirements for further assessment for the **Linux Infrastructure Intern** role at **Vyorius Drones Private Limited**.
+> This document remains the property of the author and is intended solely for evaluation purposes.
