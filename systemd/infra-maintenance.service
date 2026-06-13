@@ -1,0 +1,8 @@
+[Unit]
+Description=Infra Maintenance Task (log cleanup + health snapshot)
+
+[Service]
+Type=oneshot
+ExecStart=/opt/infra-demo/maintenance.sh
+User=infra-demo
+Group=infra-demo
