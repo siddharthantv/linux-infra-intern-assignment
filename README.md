@@ -287,6 +287,9 @@ Full details: [docs/ai-assistance-notes.md](docs/ai-assistance-notes.md)
 
 ## Author
 
-**Siddharthan TV**
+**Siddharthan T V**
 * Linux Infrastructure Intern Candidate
 * Vyorius Drones Private Limited — Take-Home Assignment
+
+> [!NOTE]
+> This assignment was done because for further assesment for the ```Linux Infrastructure Intern``` role at **Vyorius Drones Private Limited**
