@@ -133,4 +133,4 @@ stat -c "%U %G %a %n" /etc/infra-demo/infra-demo.env
 
 # Systemd restrictions
 systemctl cat infra-demo | grep -E 'NoNew|Protect|ReadWrite'
-```bash
+```
