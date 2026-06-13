@@ -17,26 +17,16 @@ customization and redeployment workflow entirely on a local machine.
 ---
 
 ## Workflow Overview
+```mermaid
+flowchart TD
+    A[Fresh VM Install] --> B["Take 'clean-baseline' snapshot (restore point)"]
+    B --> C["Clone repo + run provision.sh"]
+    C --> D["Validate with validate.sh"]
+    D --> E(["(Optional) Take 'provisioned' snapshot"])
+    E --> F["Restore 'clean-baseline' snapshot"]
+    F --> G["Run provision.sh again (idempotency test)"]
+```
 
-Fresh VM Install
-|
-v
-Take "clean-baseline" snapshot  <--- restore point
-|
-v
-Clone repo + run provision.sh
-|
-v
-Validate with validate.sh
-|
-v
-(Optional) Take "provisioned" snapshot
-|
-v
-Restore "clean-baseline" snapshot
-|
-v
-Run provision.sh again (idempotency test)
 ---
 
 ## Step-by-Step Instructions
@@ -59,7 +49,8 @@ Run provision.sh again (idempotency test)
 cat /etc/os-release
 uname -a
 ```
-Step 2: Take the Clean Baseline Snapshot
+
+### Step 2: Take the Clean Baseline Snapshot
 Before running any provisioning, take a snapshot so you can restore to
 a truly fresh state at any time.
 From the host machine:
@@ -73,7 +64,8 @@ Verify:
 ```bash
 VBoxManage snapshot "linux-infra-intern-assignment" list
 ```
-Step 3: Clone the Repo and Provision
+
+### Step 3: Clone the Repo and Provision
 Inside the VM:
 ```bash
 sudo apt install -y git
@@ -81,7 +73,7 @@ git clone https://github.com/siddharthantv/linux-infra-intern-assignment.git
 cd linux-infra-intern-assignment
 sudo ./scripts/provision.sh
 ```
-Step 4: Validate
+### Step 4: Validate
 ```bash
 sudo ./scripts/validate.sh
 ```
@@ -91,7 +83,8 @@ Optionally take a second snapshot of the provisioned state:
 VBoxManage snapshot "linux-infra-intern-assignment" take "provisioned" \
   --description "Post-provisioning: service running, firewall active, hardening applied"
 ```
-Step 5: Restore to Clean Baseline (Reprovisioning Simulation)
+
+### Step 5: Restore to Clean Baseline (Reprovisioning Simulation)
 Power off the VM first:
 ```bash
 sudo poweroff
@@ -104,8 +97,8 @@ Start the VM again:
 ```bash
 VBoxManage startvm "linux-infra-intern-assignment" --type gui
 ```
-Step 6: Re-run Provisioning from Scratch
-Log in and run the full provisioning again:
+
+### Step 6: Re-run Provisioning from Scratch
 Log in and run the full provisioning again:
 ```bash
 sudo ./scripts/provision.sh  # first run
@@ -114,11 +107,9 @@ sudo ./scripts/provision.sh  # second run - should show "already exists / skippi
 Both runs should complete without errors and validate.sh should pass
 after each.
 
+---
 
-Notes
-All work is performed inside the local VM only
-No cloud provider, cloud image, or external server is used at any point
-The snapshot/restore workflow is equivalent to deploying from a
-golden image in a real infrastructure environment
-VirtualBox appliance export (.ova) can also be used to share the
-VM state: Machine → Export Appliance
+
+> [!NOTE]
+> All work is performed inside the local VM only. No cloud provider, cloud image, or external server is used at any point. The snapshot/restore workflow is equivalent to deploying from a golden image in a real infrastructure environment VirtualBox appliance export (.ova) can also be used to share the VM state: Machine → Export Appliance
+
