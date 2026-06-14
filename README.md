@@ -107,7 +107,7 @@ linux-infra-intern-assignment/
 
 ### Prerequisites
 - VirtualBox installed on host machine
-- Ubuntu Server 24.04 LTS VM created (2GB RAM, 20GB disk)
+- Ubuntu Server 26.04 LTS VM created (2GB RAM, 20GB disk)
 - OpenSSH installed during Ubuntu setup
 - Git available inside the VM
 
