@@ -93,7 +93,7 @@ not meaningful in this context. Would be applied in a real deployment.
 
 ### 3. AppArmor / SELinux Profiles
 **Skipped because:** Writing a custom AppArmor profile for the demo service is
-outside the scope of this assignment. Ubuntu 24.04 ships with AppArmor enabled
+outside the scope of this assignment. Ubuntu 26.04 ships with AppArmor enabled
 by default for system services — no custom profile was added for infra-demo.
 
 ### 4. Automatic Security Updates (unattended-upgrades)
