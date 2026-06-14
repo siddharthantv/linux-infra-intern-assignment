@@ -38,7 +38,7 @@ flowchart TD
    - Type: Linux / Ubuntu 64-bit
    - RAM: 2048 MB
    - Disk: 20 GB (dynamically allocated)
-2. Attach Ubuntu Server 24.04 ISO and boot
+2. Attach Ubuntu Server 26.04 ISO and boot
 3. Complete the installer:
    - Hostname: `infra-intern-assignment-server`
    - Username: your preferred username
@@ -56,7 +56,7 @@ a truly fresh state at any time.
 From the host machine:
 ```bash
 VBoxManage snapshot "linux-infra-intern-assignment" take "clean-baseline" \
-  --description "Fresh Ubuntu Server 24.04 install, no provisioning applied"
+  --description "Fresh Ubuntu Server 26.04 install, no provisioning applied"
 ```
 Or via VirtualBox GUI:
 Machine → Snapshots → Take Snapshot → name it clean-baseline
