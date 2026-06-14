@@ -42,7 +42,7 @@
 ## Overview
 
 A fully automated Linux server provisioning pipeline built inside a local
-VirtualBox VM running Ubuntu Server 24.04 LTS. The project converts a fresh
+VirtualBox VM running Ubuntu Server 26.04 LTS. The project converts a fresh
 VM into a deployment-ready server environment with a running health service,
 systemd management, firewall hardening, maintenance automation, and a
 validation script that proves everything works — including after a reboot.
@@ -93,7 +93,7 @@ linux-infra-intern-assignment/
 
 | Component | Technology | Purpose |
 |---|---|---|
-| OS | Ubuntu Server 24.04 LTS | Base operating system |
+| OS | Ubuntu Server 26.04 LTS | Base operating system |
 | Virtualization | VirtualBox 7.x | Local VM host |
 | Provisioning | Bash 5.2 | Automated setup script |
 | Demo Service | Python 3.14 | HTTP health endpoint |
